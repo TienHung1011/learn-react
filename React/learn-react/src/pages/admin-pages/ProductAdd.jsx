@@ -1,14 +1,49 @@
 import { useForm } from "react-hook-form";
-const ProductAdd = () => {
+import instance from "../../axios";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { useLocation, useNavigate } from "react-router-dom";
+
+
+const productSchema = z.object({
+  title: z.string().min(5).max(100),
+  description: z.string().optional(),
+  price: z.number().min(0),
+  stock: z.number().min(1, "Stock must be at least 1"),
+  image: z.string().url("Invalid URL format").optional(),
+  category: z.string().nonempty("Category is required"),
+})
+const ProductAdd = ( ) => {
+  const navigator = useNavigate();
+  const location = useLocation ();
+  const { state } = location || {};
+  const { product } = state || {};
     const {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm();
+    } = useForm({
+     resolver: zodResolver(productSchema), 
+     defaultValues: product || {},
+    });
 
-    const onSubmit = (data) => {
-        console.log(data);
+
+
+    const onSubmit = async (data) => {
+      try {
+        if(product){
+          await instance.put(`/products/${product.id}`, data );
+          alert("Updated successfully");
+        }else{
+          await instance.post("/products", data);
+          alert("Added successfully");
+        }
+        navigator("/admin")
+      } catch (error) {
+        console.error(error);
+      }
     }
+
   return (
   <>
   <div className="container mt-5">
@@ -26,6 +61,7 @@ const ProductAdd = () => {
             placeholder="Enter product title"
             {...register("title", { required: true})}
           />
+          {errors.title?.message && <span className="text-danger">{errors.title?.message}</span>}
         </div>
 
         <div className="mb-3">
@@ -38,7 +74,7 @@ const ProductAdd = () => {
             name="description"
             rows="3"
             placeholder="Enter product description"
-            {...register("description", { required: true})}
+            {...register("description")}
           ></textarea>
         </div>
 
@@ -52,8 +88,9 @@ const ProductAdd = () => {
             id="price"
             name="price"
             placeholder="Enter product price"
-            {...register("price", { required: true})}
+            {...register("price", { required: true , valueAsNumber: true})}
           />
+          {errors.price?.message && <span className="text-danger">{errors.price?.message}</span>}
         </div>
 
         <div className="mb-3">
@@ -66,7 +103,7 @@ const ProductAdd = () => {
             id="stock"
             name="stock"
             placeholder="Enter stock quantity"
-            {...register("stock", { required: true})}
+            {...register("stock", { required: true, valueAsNumber: true})}
           />
         </div>
 
@@ -80,7 +117,7 @@ const ProductAdd = () => {
             id="image"
             name="image"
             placeholder="Enter product image URL"
-            {...register("image", { required: true})}
+            {...register("image")}
           />
         </div>
 

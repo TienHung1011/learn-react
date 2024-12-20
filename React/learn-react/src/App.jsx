@@ -9,10 +9,11 @@ import NotFoundPage from "./pages/NotFoundPage"
 import Contract from "./pages/ContractPage"
 import ProductDetail from './pages/ProductDetail'
 import ProductAdd from './pages/admin-pages/ProductAdd'
+import ProductMana from './pages/admin-pages/ProductMana'
 
 
 function App() {
-  
+
   return (
     <>
    <Header />
@@ -27,6 +28,7 @@ function App() {
       <Route path="/contract" element={<Contract />} />
       <Route path="*" element={<NotFoundPage />} />
       <Route path="/product-add" element={<ProductAdd />} />
+      <Route path="/admin" element={<ProductMana />} />
     </Routes>
    </main>
     <Footer />
