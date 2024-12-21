@@ -22,6 +22,7 @@ const ProductAdd = ( ) => {
         register,
         handleSubmit,
         formState: { errors },
+        reset,
     } = useForm({
      resolver: zodResolver(productSchema), 
      defaultValues: product || {},
@@ -140,7 +141,7 @@ const ProductAdd = ( ) => {
         </div>
 
         <button type="submit" className="btn btn-primary">
-          Add Product
+          Save
         </button>
       </form>
     </div>
