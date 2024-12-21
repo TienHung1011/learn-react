@@ -44,6 +44,7 @@ const ProductMana = () => {
     <thead>
       <tr>
         <th>Title</th>
+        <th>Image</th>
         <th>Price</th>
         <th>Description</th>
         <th>Action</th>
@@ -53,6 +54,7 @@ const ProductMana = () => {
         {products.map((items)=> (
       <tr key={items.id}>
         <td>{items.title}</td>
+        <td><img src={items.thumbnail} alt="" /></td>
         <td>{items.price} $</td>
         <td>{items.description || "Đang cập nhật"}</td>
         <td className="d-flex">
